@@ -1,5 +1,4 @@
 import React from 'react'; 
-// import Feedback from './components/Feedback/Feedback';
 import Phonebook from './components/phonebook/Phonebook';
 import ContactList from './components/phonebook/ContactList';
 import Filter from './components/phonebook/Filter';
@@ -22,15 +21,11 @@ export default class App extends React.Component {
   }
 
   addContact = newCont => {
-    const ku = this.state.contacts.find(i=>i.name === newCont.name)    
-    if (ku){      
-      console.log('ужо есть');
+    const findContact = this.state.contacts.find(contacts=>contacts.name === newCont.name)    
+    if (findContact){
       alert(`${newCont.name} уже есть`);
       return
-    }
-
-    const newContacts = this.state.contacts;
-    newContacts.push(newCont)    
+    }  
     this.setState({['contacts']: [...this.state.contacts, newCont]})
     console.log(this.state.contacts);
   }
@@ -55,34 +50,24 @@ export default class App extends React.Component {
   }
   
   componentDidUpdate(prevProps, prevState) {
-
     if (this.state.contacts !== prevState.contacts) {
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
-  }
-
-  
-  
+  }  
 
   render(){
     const { contacts, filter } = this.state;
-    
-    
     const normalizeFilter = this.state.filter.toLowerCase();
     const visibleContact = this.state.contacts.filter((contacts) => contacts.name.toLowerCase().includes(normalizeFilter))
 
     return (
       <div>
-     
         <Phonebook onSubmit={this.addContact}/>
 
         <Filter value={filter} onChange={this.changeFilter}/>
 
         <ContactList contacts={visibleContact} onDeleteContact={this.deleteContact}/>
-        
-
-        
-  
+       
       </div>
     )
   }  
